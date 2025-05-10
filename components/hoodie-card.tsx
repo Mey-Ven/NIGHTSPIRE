@@ -16,10 +16,28 @@ interface HoodieCardProps {
 export function HoodieCard({ name, price, image1, image2 }: HoodieCardProps) {
   const [isHovered, setIsHovered] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
 
+  // Check if we're in the browser
   useEffect(() => {
     setIsMounted(true)
-  }, [])
+
+    // Preload both images
+    if (typeof window !== 'undefined') {
+      const img1 = new window.Image();
+      const img2 = new window.Image();
+
+      img1.onload = () => {
+        img2.src = image2;
+      };
+
+      img2.onload = () => {
+        setImageLoaded(true);
+      };
+
+      img1.src = image1;
+    }
+  }, [image1, image2])
 
   // Function to generate WhatsApp link with pre-filled message
   const generateWhatsAppLink = () => {
@@ -45,9 +63,17 @@ export function HoodieCard({ name, price, image1, image2 }: HoodieCardProps) {
   // Add touch event handlers for mobile devices
   const handleTouchStart = () => {
     if (isMounted) {
-      setIsHovered(true);
-      // Auto-revert after a short delay
-      setTimeout(() => setIsHovered(false), 1500);
+      console.log(`Touch on ${name}: toggling image view`);
+      // Toggle the hover state on touch for mobile devices
+      setIsHovered(prev => !prev);
+
+      // Auto-revert after a longer delay to give users time to see the back
+      if (!isHovered) {
+        setTimeout(() => {
+          console.log(`Auto-reverting ${name} to front view`);
+          setIsHovered(false);
+        }, 2000);
+      }
     }
   };
 
@@ -55,17 +81,42 @@ export function HoodieCard({ name, price, image1, image2 }: HoodieCardProps) {
     <div className="bg-dark-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
       <div
         className="relative aspect-square"
-        onMouseEnter={() => isMounted && setIsHovered(true)}
-        onMouseLeave={() => isMounted && setIsHovered(false)}
+        onMouseEnter={() => {
+          if (isMounted) {
+            console.log(`Hovering ${name}: showing back image`);
+            setIsHovered(true);
+          }
+        }}
+        onMouseLeave={() => {
+          if (isMounted) {
+            console.log(`Leaving ${name}: showing front image`);
+            setIsHovered(false);
+          }
+        }}
         onTouchStart={handleTouchStart}
       >
+        {/* Front image (always loaded) */}
         <Image
-          src={isMounted && isHovered ? image2 : image1}
-          alt={name}
+          src={image1}
+          alt={`${name} front view`}
           fill
-          className="object-cover transition-opacity duration-300"
+          className={`object-cover transition-opacity duration-300 ${
+            isMounted && isHovered ? 'opacity-0' : 'opacity-100'
+          }`}
           sizes="(max-width: 640px) 45vw, (max-width: 768px) 45vw, (max-width: 1200px) 30vw, 25vw"
           priority
+        />
+
+        {/* Back image (loaded on top, shown on hover) */}
+        <Image
+          src={image2}
+          alt={`${name} back view`}
+          fill
+          className={`object-cover transition-opacity duration-300 ${
+            isMounted && isHovered ? 'opacity-100' : 'opacity-0'
+          }`}
+          sizes="(max-width: 640px) 45vw, (max-width: 768px) 45vw, (max-width: 1200px) 30vw, 25vw"
+          priority={imageLoaded}
         />
       </div>
       <div className="p-3 sm:p-4">
