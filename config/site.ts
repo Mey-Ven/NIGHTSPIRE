@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: "NIGHTSPIRE",
-  description: "Premium Streetwear Brand",
+  description: "Premium NIGHTSPIRE Hoodies",
 
   // Contact information
   contact: {
