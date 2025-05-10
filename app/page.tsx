@@ -10,7 +10,7 @@ export default function Home() {
       name: "NIGHTSPIRE Classic Black",
       price: 219.99,
       image1: "/hoodie1.jpg",
-      image2: "/back.jpg",
+      image2: "/Back.jpg", // Fixed case sensitivity
     },
     {
       id: 2,
@@ -24,7 +24,7 @@ export default function Home() {
       name: "NIGHTSPIRE Sukuna Curse",
       price: 249.99,
       image1: "/skn.jpg",
-      image2: "skn-bk.jpg",
+      image2: "/skn-bk.jpg", // Added missing leading slash
     },
     {
       id: 4,

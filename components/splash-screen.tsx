@@ -62,7 +62,7 @@ export function SplashScreen() {
       <div className="relative w-48 h-48 mb-8">
         <Image
           src="/Logo-W.png"
-          alt="NIGHTSPARE"
+          alt="NIGHTSPIRE"
           fill
           className="object-contain"
           priority

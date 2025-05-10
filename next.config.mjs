@@ -7,7 +7,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    // Remove unoptimized: true to allow Vercel to optimize images
+    domains: [],
+    remotePatterns: [],
   },
 }
 
