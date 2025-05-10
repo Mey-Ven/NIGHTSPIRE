@@ -1,12 +1,13 @@
 export const siteConfig = {
-  name: "SDFM 2520",
+  name: "NIGHTSPIRE",
   description: "Premium Streetwear Brand",
 
   // Contact information
   contact: {
-    whatsapp: "212777169039", // Morocco country code (212) + number without leading 0
-    email: "elmehdirahaoui1@gmail.com", // Replace with your actual email
-    instagram: "sdfm2520", // Replace with your Instagram handle
+    // Use environment variables with fallback to empty strings
+    whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "your_whatsapp_number_here",
+    email: process.env.NEXT_PUBLIC_EMAIL || "your_email_here",
+    //instagram: "nightspire",
   },
 
   // Store information
